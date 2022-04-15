@@ -8,8 +8,8 @@ app.use(express.json())
 
 app.post('/invite', function (req, res) {
   const { i } = req.body
-  console.log(req.body)
-  res.json(req.body)
+  // console.log(req.body)
+  res.json(req.headers)
 })
 
 app.listen(port, () => {
