@@ -1,5 +1,5 @@
 import express from 'express'
-import { invite } from './discord/index.js'
+// import { invite } from './discord/index.js'
 
 const app = express()
 const port = 3003
