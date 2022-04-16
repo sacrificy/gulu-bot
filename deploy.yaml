@@ -1,19 +1,19 @@
 # deploy.yaml
 apps:
-    script: ./index.js       # 入口文件
-    name: 'bot'              # 程序名称
-    env:                     # 环境变量
+  - script: ./index.js # 入口文件
+    name: "bot" # 程序名称
+    env: # 环境变量
       COMMON_VARIABLE: true
     env_production:
       NODE_ENV: production
 
-deploy:                     # 部署脚本
-  production:               # 生产环境
-    user: Administrator            # 服务器的用户名
-    host: 43.154.155.225     # 服务器的ip地址
-    ref: origin/main      # 要拉取的git分支
+deploy: # 部署脚本
+  production: # 生产环境
+    user: Administrator # 服务器的用户名
+    host: [43.154.155.225, 43.128.19.233] # 服务器的ip地址
+    ref: origin/main # 要拉取的git分支
     repo: git@github.com:sacrificy/gulu-bot.git # 远程仓库地址
-    path: C:/Users/Administrator/Desktop/project       # 拉取到服务器某个目录下
+    path: C:/Users/Administrator/Desktop/project # 拉取到服务器某个目录下
     # pre-deploy: git fetch --all # 部署前执行
     # pre-deploy: git pull # 部署前执行
     post-deploy: npm install &&  pm2 reload deploy.yaml --env production # 部署后执行
