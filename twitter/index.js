@@ -24,14 +24,14 @@ puppeteer.use(
   })
 );
 
-async function getPage(i) {
+async function launchChrome(i) {
   const browser = await puppeteer.launch({
     headless: false,
     executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
     userDataDir: `C:/account/${i}`,
   });
   const page = await browser.newPage();
-  return page
+  return [browser, page]
 }
 
 function getFrends(num) {
@@ -85,7 +85,7 @@ export const loginTwitter = async (i) => {
     phone
   ] = accountItem.split(':');
   console.log(i, username, 'start')
-  const page = await getPage(i)
+  const [browser, page] = await launchChrome(i)
   try {
     await page.goto('https://twitter.com/i/flow/login')
     await page.waitForSelector('input[autocomplete="username"]', { visible: true })
@@ -112,7 +112,7 @@ export const loginTwitter = async (i) => {
 
 export const open = async (i) => {
   console.log(i, 'start')
-  const page = await getPage(i)
+  const [browser, page] = await launchChrome(i)
   try {
     await page.goto('https://twitter.com/home')
     console.log(i, 'success')
@@ -128,7 +128,7 @@ export const randomTweet = async (i) => {
   const response = await axios.get('https://api.adviceslip.com/advice')
   const advice = response?.data?.slip?.advice
   if (!advice) return
-  const page = await getPage(i)
+  const [browser, page] = await launchChrome(i)
   try {
     await page.goto('https://twitter.com/home')
     await tweet(page, advice)
@@ -142,7 +142,7 @@ export const randomTweet = async (i) => {
 
 export const randomRetweet = async (i) => {
   console.log(i, 'start')
-  const page = await getPage(i)
+  const [browser, page] = await launchChrome(i)
   try {
     await page.goto('https://twitter.com/home')
     await retweet(page)
@@ -159,7 +159,7 @@ export const prize = async (i) => {
   const discordName = discordList[i].split('----')[0];
   const friends = getFrends(5)
   console.log(i, friends)
-  const page = await getPage(i)
+  const [browser, page] = await launchChrome(i)
   try {
     await follow(page, 'MindblowonNFT')
     await follow(page, 'WSecretClub_nft')
