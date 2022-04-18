@@ -1,15 +1,15 @@
 import express from 'express'
-// import { invite } from './discord/index.js'
+import { twitter } from './twitter/index.js'
 
 const app = express()
 const port = 3003
 
 app.use(express.json())
 
-app.post('/invite', function (req, res) {
-  const { i } = req.body
-  // console.log(req.body)
-  res.json(req.headers)
+app.post('/twitter', async function (req, res) {
+  const { index, actionList } = req.body
+  const result = await twitter(index, actionList)
+  res.json(result)
 })
 
 app.listen(port, () => {

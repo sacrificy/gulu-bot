@@ -2,15 +2,16 @@ import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import RecaptchaPlugin from 'puppeteer-extra-plugin-recaptcha'
 import fs from 'fs'
-import axios from 'axios';
+import axios from 'axios'
+import path from 'path'
 
-const configData = fs.readFileSync('../config.json')
+const configData = fs.readFileSync(path.resolve('__dirname', '../config.json'))
 const config = JSON.parse(configData.toString())
 const {
   appName,
   captchaToken
 } = config
-const twitterData = fs.readFileSync(`../account/${appName}/twitter.txt`)
+const twitterData = fs.readFileSync(path.resolve('__dirname', `../account/${appName}/twitter.txt`))
 const twitterList = twitterData.toString().split('\r\n')
 
 puppeteer.use(StealthPlugin());
@@ -73,6 +74,10 @@ async function follow(page, id) {
   await page.keyboard.press('Escape') // special case
   await page.click('div[data-testid*="follow"]')
   await page.waitForTimeout(1000)
+}
+
+async function goto(page, link) {
+  await page.goto(link)
 }
 
 export const loginTwitter = async (i) => {
@@ -179,9 +184,43 @@ export const prize = async (i) => {
   await browser.close()
 };
 
-for (let i = 0; i < twitterList.length; i++) {
-  await loginTwitter(i)
-  // await randomTweet(i)
-  // await randomRetweet(i)
-  // await prize(i)
+// for (let i = 0; i < twitterList.length; i++) {
+//   await loginTwitter(i)
+//   // await randomTweet(i)
+//   // await randomRetweet(i)
+//   // await prize(i)
+// }
+
+export async function twitter(index, actionList = []) {
+  const [browser, page] = await launchChrome(index)
+  let result = { success: `${index}成功`, text: '' }
+  try {
+    for (let i = 0; i < actionList.length; i++) {
+      const actionItem = actionList[i]
+      const { action, value } = actionItem
+      switch (action) {
+        case 'like':
+          await like(page)
+          break;
+        case 'retweet':
+          await retweet(page)
+          break;
+        case 'tweet':
+          await tweet(page, value)
+          break;
+        case 'follow':
+          await follow(page, value)
+          break;
+        case 'goto':
+          await goto(page, value)
+          break;
+        default:
+          break;
+      }
+    }
+  } catch (error) {
+    result = { success: `${index}成功`, text: error }
+  }
+  await browser.close()
+  return result
 }
