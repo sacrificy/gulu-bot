@@ -183,13 +183,6 @@ export const prize = async (i) => {
   await browser.close()
 };
 
-// for (let i = 0; i < twitterList.length; i++) {
-//   await loginTwitter(i)
-//   // await randomTweet(i)
-//   // await randomRetweet(i)
-//   // await prize(i)
-// }
-
 export async function twitter(index, actionList = []) {
   const [browser, page] = await launchChrome(index)
   let result = { success: `${index}成功`, text: '' }

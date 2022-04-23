@@ -89,7 +89,7 @@ async function setAddress(i) {
 
 }
 
-for (let i = 4; i < 5; i++) {
+for (let i = 5; i < 6; i++) {
     await setAddress(i)
 }
 // https://www.premint.xyz/profile/
