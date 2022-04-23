@@ -41,7 +41,7 @@ export const loginDiscord = async (i) => {
     let [
         username,
         mailPassword,
-        mailToken,
+        // mailToken,
         password,
         googleSecret,
         discordToken,
