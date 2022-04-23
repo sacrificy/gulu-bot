@@ -3,15 +3,14 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import RecaptchaPlugin from 'puppeteer-extra-plugin-recaptcha'
 import fs from 'fs'
 import axios from 'axios'
-import path from 'path'
 
-const configData = fs.readFileSync(path.resolve('__dirname', '../config.json'))
+const configData = fs.readFileSync(new URL('../config.json', import.meta.url))
 const config = JSON.parse(configData.toString())
 const {
   appName,
   captchaToken
 } = config
-const twitterData = fs.readFileSync(path.resolve('__dirname', `../account/${appName}/twitter.txt`))
+const twitterData = fs.readFileSync(new URL(`../account/${appName}/twitter.txt`, import.meta.url))
 const twitterList = twitterData.toString().split('\r\n')
 
 puppeteer.use(StealthPlugin());
@@ -98,9 +97,9 @@ export const loginTwitter = async (i) => {
     await page.keyboard.press('Enter')
     await page.waitForSelector('input[autocomplete="current-password"]', { visible: true })
     await page.type('input[autocomplete="current-password"]', password)
-    await page.keyboard.press('Enter')
-    await page.waitForSelector('input[autocomplete="tel"]', { visible: true })
-    await page.type('input[autocomplete="tel"]', phone)
+    // await page.keyboard.press('Enter')
+    // await page.waitForSelector('input[autocomplete="tel"]', { visible: true })
+    // await page.type('input[autocomplete="tel"]', phone)
     await Promise.all([
       await page.keyboard.press('Enter'),
       page.waitForNavigation(),
