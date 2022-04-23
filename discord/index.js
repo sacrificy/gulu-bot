@@ -46,6 +46,7 @@ export const loginDiscord = async (i) => {
         googleSecret,
         discordToken,
     ] = accountItem.split('----');
+    discordToken = discordToken.replaceAll('"', '');
     console.log(i, username, 'start')
     const [browser, page] = await launchChrome(i)
     try {
