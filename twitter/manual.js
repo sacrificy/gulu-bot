@@ -19,7 +19,7 @@ for (let i = 0; i < 50; i++) {
 function getBannerPic(i) {
     return axios({
         method: 'get',
-        url: faker.image.nature(600, 220, true),
+        url: faker.image.animals(600, 220, true),
         responseType: 'stream'
     }).then((response) => {
         response.data.pipe(fs.createWriteStream(`${picDir}/banner_${i}.jpg`));
