@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "pm2 deploy deploy.yaml production setup",
+    "deploy": "pm2 deploy deploy.yaml production"
   },
   "author": "",
   "license": "ISC",
