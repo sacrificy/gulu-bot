@@ -3,12 +3,14 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import RecaptchaPlugin from 'puppeteer-extra-plugin-recaptcha'
 import fs from 'fs'
 import axios from 'axios'
+import faker from '@faker-js/faker'
 
 const configData = fs.readFileSync(new URL('../config.json', import.meta.url))
 const config = JSON.parse(configData.toString())
 const {
   appName,
-  captchaToken
+  captchaToken,
+  picDir
 } = config
 const twitterData = fs.readFileSync(new URL(`../account/${appName}/twitter.txt`, import.meta.url))
 const twitterList = twitterData.toString().split('\r\n')
@@ -114,6 +116,32 @@ export const loginTwitter = async (i) => {
   await browser.close()
 };
 
+export const setProfile = async (i) => {
+  console.log(i, 'start')
+  const [browser, page] = await launchChrome(i)
+  await page.goto('https://twitter.com/i/flow/setup_profile')
+  const inputAcatar = await page.waitForSelector('input[data-testid="fileInput"]')
+  await inputAcatar.uploadFile(`${picDir}/avatar_${i}.jpg`)
+  const applyButton = await page.waitForSelector('div[data-testid="applyButton"]')
+  await applyButton.click()
+  const nextButton = await page.waitForSelector('div[data-testid="ocfSelectAvatarNextButton"]')
+  await nextButton.click()
+  const inputBanner = await page.waitForSelector('input[data-testid="fileInput"]')
+  await inputBanner.uploadFile(`${picDir}/banner_${i}.jpg`)
+  const applyButton2 = await page.waitForSelector('div[data-testid="applyButton"]')
+  await applyButton2.click()
+  const nextButton2 = await page.waitForSelector('div[data-testid="ocfSelectBannerNextButton"]')
+  await nextButton2.click()
+  const bio = await page.waitForSelector('textarea[data-testid="ocfEnterTextTextInput"]')
+  await bio.type(faker.company.companyName())
+  const nextButton3 = await page.waitForSelector('div[data-testid="ocfEnterTextNextButton"]')
+  await nextButton3.click()
+  await page.waitForTimeout(2000)
+  await browser.close()
+  console.log(i, 'end')
+
+}
+
 export const open = async (i) => {
   console.log(i, 'start')
   const [browser, page] = await launchChrome(i)
@@ -156,31 +184,6 @@ export const randomRetweet = async (i) => {
     console.log(error)
   }
   // await browser.close()
-};
-
-export const prize = async (i) => {
-  console.log(i, 'start')
-  const discordName = discordList[i].split('----')[0];
-  const friends = getFrends(5)
-  console.log(i, friends)
-  const [browser, page] = await launchChrome(i)
-  try {
-    await follow(page, 'MindblowonNFT')
-    await follow(page, 'WSecretClub_nft')
-    await follow(page, 'ethoverfiat')
-
-    await page.goto('https://twitter.com/WSecretClub_nft/status/1513895758327848967')
-
-    await like(page)
-    await retweet(page)
-    await tweet(page, friends)
-
-    console.log(i, 'success')
-  } catch (error) {
-    console.log(i, 'fail')
-    console.log(error)
-  }
-  await browser.close()
 };
 
 export async function twitter(index, actionList = []) {
