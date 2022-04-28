@@ -110,6 +110,28 @@ export const open = async (i) => {
     // await browser.close()
 };
 
+export async function invite(i, inviteLink) {
+    console.log(i, 'start')
+    const [browser, page] = await launchChrome(i)
+    try {
+        await page.goto(inviteLink);
+        await page.waitForTimeout(1000)
+        await page.waitForSelector('section button', { visible: true })
+        await page.click('section button')
+        const response = await page.waitForResponse((response) => {
+            return response.url().startsWith("https://discord.com/api/v9/invites")
+        });
+        if (response.status() === 200) {
+            await page.waitForTimeout(2000)
+            // await browser.close()
+            // await page.solveRecaptchas();
+        }
+        console.log(i, "end")
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export async function discord(index, actionList = []) {
     const [browser, page] = await launchChrome(index)
     let result = { success: `${index}成功`, text: '' }
