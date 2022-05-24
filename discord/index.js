@@ -53,19 +53,19 @@ export const loginDiscord = async (i) => {
         await page.goto('https://discord.com/login');
         await page.waitForTimeout(1000);
         // token登录
-        await page.evaluate((discordToken) => {
-            window.t = discordToken;
-            window.localStorage = document.body.appendChild(
-                document.createElement`iframe`
-            ).contentWindow.localStorage;
-            window.setInterval(() => (window.localStorage.token = `"${window.t}"`));
-            window.location.reload();
-        }, discordToken);
-        await page.waitForNavigation();
-        await page.waitForNavigation();
-        await page.waitForNavigation();
+        // await page.evaluate((discordToken) => {
+        //     window.t = discordToken;
+        //     window.localStorage = document.body.appendChild(
+        //         document.createElement`iframe`
+        //     ).contentWindow.localStorage;
+        //     window.setInterval(() => (window.localStorage.token = `"${window.t}"`));
+        //     window.location.reload();
+        // }, discordToken);
+        // await page.waitForNavigation();
+        // await page.waitForNavigation();
+        // await page.waitForNavigation();
         // 账密登录
-        if (page.url() === 'https://discord.com/login') {
+        // if (page.url() === 'https://discord.com/login') {
             const format = googleSecret.replace(/\s/g, '');
             const totpGenerator = new TOTP(format, 30);
             await page.waitForSelector('input[name="email"]', { visible: true })
@@ -86,7 +86,7 @@ export const loginDiscord = async (i) => {
                 await page.keyboard.press('Enter'),
                 page.waitForNavigation(),
             ]);
-        }
+        // }
         await page.waitForTimeout(1000)
         console.log(i, username, 'success')
     } catch (error) {
@@ -94,7 +94,7 @@ export const loginDiscord = async (i) => {
         console.log(error)
         fs.appendFileSync('failLogin.txt', accountItem + '\r\n')
     }
-    await browser.close()
+    // await browser.close()
 };
 
 export const open = async (i) => {
